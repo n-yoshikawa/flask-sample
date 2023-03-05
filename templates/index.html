@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <title>Flask test</title>
+</head>
+<body>
+  <h1>Flask test</h1>
+  <div>
+    <div>
+      <textarea id="input"></textarea> <!-- Get user input -->
+    </div>
+    <div>
+    <button id="submit_button" type="button">Send data</button>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <textarea id="output"></textarea> <!-- Show data from server -->
+  </div>
+
+<!-- Use jQuery via CDN -->
+<script
+  src="https://code.jquery.com/jquery-3.6.3.min.js"
+  integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
+  crossorigin="anonymous"></script>
+<script>
+  $('#submit_button').on('click', function(event) { // if submit button is clicked
+    let send_data = JSON.stringify({input: $('#input').val()}) // convert data to JSON format
+    $.ajax({ 
+      url: '{{ url_for('submit') }}',  // send data to submit function in app.py
+      contentType: 'application/json', // sending data is in JSON format
+      type: 'POST',                    // protocol
+      data: send_data,                 // specify which data to send
+      dataType: 'json',                // specify receiving data format
+      success: function(response){     // what to do after sending succeeded
+        $('#output').text(response.result); // update content of output textarea
+      } 
+    })
+  });
+</script>
+</body>
+</html>
